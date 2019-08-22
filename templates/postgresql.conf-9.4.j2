@@ -617,3 +617,8 @@ include_dir = '{{ postgresql_include_dir }}'			# include files ending in '.conf'
 #------------------------------------------------------------------------------
 
 # Add settings for extensions here
+
+{% if "pg_stat_statements" in postgresql_shared_preload_libraries %}
+pg_stat_statements.max = {{ postgresql_stat_statements_max }}
+pg_stat_statements.track = {{ postgresql_stat_statements_track }}
+{% endif %}
