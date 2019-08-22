@@ -101,9 +101,9 @@ postgresql_database_schemas:
 # List of user privileges to be applied (optional)
 postgresql_user_privileges:
   - name: baz                   # user name
-    db: foobar                  # database
-    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
-    role_attr_flags: "CREATEDB" # role attribute flags
+    schema: foobar              # schema
+    objs: ALL_IN_SCHEMA         # objects to be applied for
+    privs: "SELECT"             # privileges
 ```
 
 There's a lot more knobs and bolts to set, which you can find in the [defaults/main.yml](./defaults/main.yml)
@@ -112,6 +112,20 @@ There's a lot more knobs and bolts to set, which you can find in the [defaults/m
 #### Fork additions
 
 - Add pg_stat_statements variables, if pg_stat_statement in preload libraries;
+- Add role_attr_flags to postgresql_users for create users with some attrs e.g. SUPERUSER;
+- Add postgresql_all_databases_schema variable to create one schema in all databases from postgresql_databases;
+- Updating user privileges now using postgresql_privs ansible module. Example:
+```yaml
+postgresql_user_privileges:
+  - name: readonly_user
+    type: schema
+    objs: dbo
+    privs: "USAGE"
+  - name: readonly_user
+    schema: dbo
+    objs: ALL_IN_SCHEMA
+    privs: "SELECT"
+```
 
 
 #### Testing
